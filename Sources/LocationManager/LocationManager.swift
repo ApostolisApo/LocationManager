@@ -14,7 +14,7 @@ protocol LocationManagerDelegate {
     func locationManagerDidNotUpdateLocation(_ locationManager: LocationManager)
 }
 
-class LocationManager: NSObject, CLLocationManagerDelegate {
+public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     var locationManager: CLLocationManager?
     var running = false
@@ -63,11 +63,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("error when updating location: \(error.localizedDescription)")
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locationManager?.location
             else {
                 self.delegate?.locationManagerDidNotUpdateLocation(self)

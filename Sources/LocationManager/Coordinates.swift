@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Coordinates: NSObject, Comparable {
+public class Coordinates: NSObject, Comparable {
     var latitude: Double!
     var longitude: Double!
     static let empty = Coordinates(withLatitude: 0.0, andLongitude: 0.0)
@@ -69,7 +69,7 @@ class Coordinates: NSObject, Comparable {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
     
-    static func < (lhs: Coordinates, rhs: Coordinates) -> Bool {
+    public static func < (lhs: Coordinates, rhs: Coordinates) -> Bool {
         return lhs.latitude < rhs.latitude && lhs.longitude < rhs.longitude
     }
 }
