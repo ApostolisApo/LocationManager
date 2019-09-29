@@ -1,2 +1,3 @@
 # LocationManager
-iOS Location Manager Wrapper
+
+A description of this package.
