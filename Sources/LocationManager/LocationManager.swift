@@ -42,7 +42,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    static let shared = LocationManager()
+    public static let shared = LocationManager()
     
     @objc func startUpdatingLocation() {
         if let initializedLocationManager = locationManager {
