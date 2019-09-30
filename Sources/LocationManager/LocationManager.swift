@@ -44,7 +44,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     public static let shared = LocationManager()
     
-    @objc func startUpdatingLocation() {
+    @objc public func startUpdatingLocation() {
         if let initializedLocationManager = locationManager {
             initializedLocationManager.startUpdatingLocation()
             initializedLocationManager.startMonitoringSignificantLocationChanges()
@@ -81,7 +81,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         self.delegate?.locationManager(self, didUpdateCurrentLocation: coordinates)
     }
     
-    func findDistance(to point: Coordinates) -> Int {
+    public func findDistance(to point: Coordinates) -> Int {
         guard let startingLocation = self.currentLocation else {return 0}
         
         let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude)
