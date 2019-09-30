@@ -12,6 +12,7 @@ import Foundation
 public protocol LocationManagerDelegate {
     func locationManager(_ locationManager: LocationManager, didUpdateCurrentLocation location: Coordinates)
     func locationManagerDidNotUpdateLocation(_ locationManager: LocationManager)
+    func locationManager(_ locationManager: LocationManager, didChangeAuthorization status: CLAuthorizationStatus)
 }
 
 public class LocationManager: NSObject, CLLocationManagerDelegate {
@@ -43,6 +44,23 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     public static let shared = LocationManager()
+    
+    public func requestAlwaysPermission() {
+        if let initializedLocationManager = locationManager {
+            initializedLocationManager.requestAlwaysAuthorization()
+        }
+    }
+    
+    public func requestWhenInUsePermission() {
+        if let initializedLocationManager = locationManager {
+            initializedLocationManager.requestWhenInUseAuthorization()
+        }
+    }
+    
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        self.delegate?.locationManager(self, didChangeAuthorization: status)
+    }
+
     
     @objc public func startUpdatingLocation() {
         if let initializedLocationManager = locationManager {
@@ -87,5 +105,10 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude)
         let currentLocation = CLLocation(latitude: startingLocation.latitude, longitude: startingLocation.longitude)
         return Int(pointLocation.distance(from: currentLocation))
+    }
+}
+
+extension LocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     }
 }
