@@ -18,7 +18,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     var locationManager: CLLocationManager?
     var running = false
-    var delegate: LocationManagerDelegate?
+    public var delegate: LocationManagerDelegate?
     private let lockQueue = DispatchQueue(label: "LocationManager.lockQueue")
     fileprivate var _currentLocation: Coordinates?
     var currentLocation: Coordinates? {
