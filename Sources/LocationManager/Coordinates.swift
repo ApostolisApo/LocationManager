@@ -13,13 +13,13 @@ public class Coordinates: NSObject, Comparable {
     var longitude: Double!
     static let empty = Coordinates(withLatitude: 0.0, andLongitude: 0.0)
     
-    init(withLatitude latitude: Double, andLongitude longitude: Double) {
+    public init(withLatitude latitude: Double, andLongitude longitude: Double) {
         super.init()
         self.latitude = latitude
         self.longitude = longitude
     }
     
-    init?(fromDict dict: [String: Any]) {
+    public init?(fromDict dict: [String: Any]) {
         super.init()
         guard let asDouble = extractFrom(doubles: dict)
             else {
@@ -33,8 +33,12 @@ public class Coordinates: NSObject, Comparable {
         setValues(forLatitude: asDouble.0, forLongitude: asDouble.1)
     }
     
-    func toDict() -> [String: Double] {
+    public func toDict() -> [String: Double] {
         return ["Latitude": latitude, "Longitude": longitude]
+    }
+    
+    public func toString() -> String {
+        return "\(latitude), \(longitude)"
     }
     
     private func extractFrom(doubles dict: [String: Any]) -> (Double, Double)? {
