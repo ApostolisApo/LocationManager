@@ -113,10 +113,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         return Int(pointLocation.distance(from: currentLocation))
     }
     
-    public func getAreaName() {
+    public func getAreaName(forCoordinates coordinates: Coordinates) {
         guard let apiKey = self.googleGeocodeAPIKey,
-            let lat = self.locationManager.currentLocation?.latitude, let long = self.locationManager.currentLocation?.longitude,
-            let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(lat),\(long)&key=\(apiKey)")
+            let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(coordinates.latitude),\(coordinates.longitude)&key=\(apiKey)")
             else {
                 return
         }

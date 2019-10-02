@@ -38,7 +38,11 @@ public class Coordinates: NSObject, Comparable {
     }
     
     public func toString() -> String {
-        return "\(latitude), \(longitude)"
+        guard let setLatitude = latitude,
+            let setLongitude = longitude else {
+                return ""
+        }
+        return "\(setLatitude), \(setLongitude)"
     }
     
     private func extractFrom(doubles dict: [String: Any]) -> (Double, Double)? {

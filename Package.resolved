@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "RestManager",
+        "repositoryURL": "https://github.com/ApostolisApo/RestManager.git",
+        "state": {
+          "branch": "master",
+          "revision": "b1ed4bebd7843da64179ce70d65d191661330b53",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
