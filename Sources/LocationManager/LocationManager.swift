@@ -8,6 +8,7 @@
 
 import CoreLocation
 import Foundation
+import RestManager
 
 public protocol LocationManagerDelegate {
     func locationManager(_ locationManager: LocationManager, didUpdateCurrentLocation location: Coordinates)
