@@ -131,4 +131,6 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
 public extension LocationManagerDelegate {
     func locationManager(_ locationManager: LocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     }
+    func locationManager(_ locationManager: LocationManager, didGetAreaName name: String) {
+    }
 }
