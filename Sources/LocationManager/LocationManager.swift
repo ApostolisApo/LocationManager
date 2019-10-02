@@ -13,12 +13,14 @@ public protocol LocationManagerDelegate {
     func locationManager(_ locationManager: LocationManager, didUpdateCurrentLocation location: Coordinates)
     func locationManagerDidNotUpdateLocation(_ locationManager: LocationManager)
     func locationManager(_ locationManager: LocationManager, didChangeAuthorization status: CLAuthorizationStatus)
+    func locationManager(_ locationManager: LocationManager, didGetAreaName name: String)
 }
 
 public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     var locationManager: CLLocationManager?
     var running = false
+    var googleGeocodeAPIKey: String?
     public var delegate: LocationManagerDelegate?
     private let lockQueue = DispatchQueue(label: "LocationManager.lockQueue")
     fileprivate var _currentLocation: Coordinates?
@@ -35,6 +37,10 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         self.initializeCLLocationManager()
         self.startUpdatingLocation()
+    }
+    
+    public func setupGoogleGeocodeAPI(withKey key:String) {
+        self.googleGeocodeAPIKey = key
     }
     
     @objc func handleAppInUse() {
@@ -105,6 +111,20 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude)
         let currentLocation = CLLocation(latitude: startingLocation.latitude, longitude: startingLocation.longitude)
         return Int(pointLocation.distance(from: currentLocation))
+    }
+    
+    public func getAreaName() {
+        guard let apiKey = self.googleGeocodeAPIKey,
+            let lat = self.locationManager.currentLocation?.latitude, let long = self.locationManager.currentLocation?.longitude,
+            let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(lat),\(long)&key=\(apiKey)")
+            else {
+                return
+        }
+        RestManager().async(get: url, withTimeout: .normal){(result) in
+            if let x = try? JSONDecoder().decode(GooglePlaceResponse.self, from: result){
+                self.delegate?.locationManager(self, didGetAreaName: "\(x.results[0].address_components[2].long_name), \(x.results[0].address_components[3].long_name)")
+            }
+        }
     }
 }
 
