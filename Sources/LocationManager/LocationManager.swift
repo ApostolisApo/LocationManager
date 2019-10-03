@@ -116,10 +116,13 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     public func getAreaName(forCoordinates coordinates: Coordinates) {
         guard let apiKey = self.googleGeocodeAPIKey,
-            let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(coordinates.latitude),\(coordinates.longitude)&key=\(apiKey)")
+            let latitude = coordinates.latitude,
+            let longitude = coordinates.longitude,
+            let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(latitude),\(longitude)&key=\(apiKey)")
             else {
                 return
         }
+        print("area name request: \(url)")
         RestManager().async(get: url, withTimeout: .normal){(result) in
             if let x = try? JSONDecoder().decode(GooglePlaceResponse.self, from: result){
                 self.delegate?.locationManager(self, didGetAreaName: "\(x.results[0].address_components[2].long_name), \(x.results[0].address_components[3].long_name)")
