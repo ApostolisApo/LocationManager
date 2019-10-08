@@ -114,6 +114,20 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         return Int(pointLocation.distance(from: currentLocation))
     }
     
+    public func findNearest(from pointSet: [Coordinates]) -> Coordinates?{
+        var nearestDistance: Int?
+        var nearestCoordinates: Coordinates?
+        
+        for candidatePoint in pointSet {
+            let distance = findDistance(to: candidatePoint)
+            if nearestDistance == nil || distance < nearestDistance! {
+                nearestDistance = distance
+                nearestCoordinates = candidatePoint
+            }
+        }
+        return nearestCoordinates
+    }
+    
     public func getAreaName(forCoordinates coordinates: Coordinates) {
         guard let apiKey = self.googleGeocodeAPIKey,
             let latitude = coordinates.latitude,
