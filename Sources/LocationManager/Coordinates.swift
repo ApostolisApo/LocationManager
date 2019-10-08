@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 public class Coordinates: NSObject, Comparable {
     var latitude: Double!
@@ -43,6 +44,10 @@ public class Coordinates: NSObject, Comparable {
                 return ""
         }
         return "\(setLatitude), \(setLongitude)"
+    }
+    
+    public func toCLLocationCoordinates() -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2DMake(latitude, longitude)
     }
     
     private func extractFrom(doubles dict: [String: Any]) -> (Double, Double)? {
