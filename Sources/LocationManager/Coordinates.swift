@@ -74,7 +74,7 @@ public class Coordinates: NSObject, Comparable {
         self.longitude = lon
     }
     
-    static func == (lhs: Coordinates, rhs: Coordinates) -> Bool {
+    public static func == (lhs: Coordinates, rhs: Coordinates) -> Bool {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
     
