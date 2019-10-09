@@ -130,9 +130,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     public func getAreaName(forCoordinates coordinates: Coordinates) {
         guard let apiKey = self.googleGeocodeAPIKey,
-            let latitude = coordinates.latitude,
-            let longitude = coordinates.longitude,
-            let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(latitude),\(longitude)&key=\(apiKey)")
+            let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(coordinates.latitude),\(coordinates.longitude)&key=\(apiKey)")
             else {
                 return
         }

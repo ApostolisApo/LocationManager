@@ -10,28 +10,28 @@ import Foundation
 import MapKit
 
 public class Coordinates: NSObject, Comparable {
-    var latitude: Double!
-    var longitude: Double!
+    var latitude: Double
+    var longitude: Double
     static let empty = Coordinates(withLatitude: 0.0, andLongitude: 0.0)
     
     public init(withLatitude latitude: Double, andLongitude longitude: Double) {
-        super.init()
         self.latitude = latitude
         self.longitude = longitude
     }
     
     public init?(fromDict dict: [String: Any]) {
-        super.init()
-        guard let asDouble = extractFrom(doubles: dict)
+        guard let asDouble = Coordinates.extractFrom(doubles: dict)
             else {
-                guard let asDouble = extractFrom(validStrings : dict)
+                guard let asDouble = Coordinates.extractFrom(validStrings : dict)
                     else {
                         return nil
                 }
-                setValues(forLatitude: asDouble.0, forLongitude: asDouble.1)
+                self.latitude = asDouble.0
+                self.longitude = asDouble.1
                 return
         }
-        setValues(forLatitude: asDouble.0, forLongitude: asDouble.1)
+        self.latitude = asDouble.0
+        self.longitude = asDouble.1
     }
     
     public func toDict() -> [String: Double] {
@@ -39,18 +39,14 @@ public class Coordinates: NSObject, Comparable {
     }
     
     public func toString() -> String {
-        guard let setLatitude = latitude,
-            let setLongitude = longitude else {
-                return ""
-        }
-        return "\(setLatitude), \(setLongitude)"
+        return "\(latitude), \(longitude)"
     }
     
     public func toCLLocationCoordinates() -> CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(latitude, longitude)
     }
     
-    private func extractFrom(doubles dict: [String: Any]) -> (Double, Double)? {
+    private static func extractFrom(doubles dict: [String: Any]) -> (Double, Double)? {
         guard let latitude = dict["Latitude"] as? Double,
             let longitude = dict["Longitude"] as? Double
             else {
@@ -59,7 +55,7 @@ public class Coordinates: NSObject, Comparable {
         return (latitude, longitude)
     }
     
-    private func extractFrom(validStrings dict: [String: Any]) -> (Double, Double)? {
+    private static func extractFrom(validStrings dict: [String: Any]) -> (Double, Double)? {
         guard let latitude = dict["Latitude"] as? String,
             let longitude = dict["Longitude"] as? String
             else {
