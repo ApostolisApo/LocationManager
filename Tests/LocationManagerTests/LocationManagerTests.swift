@@ -3,8 +3,8 @@ import XCTest
 
 final class LocationManagerTests: XCTestCase {
     func testCoordinatesEqual() {
-        let coordinates1 = Coordinates(withLatitude: 10.0, andLongitude: 11.0)
-        let coordinates2 = Coordinates(withLatitude: 10.0, andLongitude: 11.0)
+        let coordinates1 = Coordinates(withLatitude: 57.72863667097471, andLongitude: 11.970982871291888)
+        let coordinates2 = Coordinates(withLatitude: 57.72863667097471, andLongitude: 11.970982871291888)
         assert(coordinates1 == coordinates2)
     }
 
