@@ -9,13 +9,25 @@
 import Foundation
 import MapKit
 
- public class Coordinates: NSObject, Comparable {
+public class Coordinates: NSObject, Comparable {
     var latitude: Double
     var longitude: Double
     static let empty = Coordinates(withLatitude: 0.0, andLongitude: 0.0)
     
     public override var description: String {
         return "\(latitude)|\(longitude)"
+    }
+    
+    public var stringFormat: String {
+        return "\(latitude)|\(longitude)"
+    }
+
+    public var dictionaryFormat: [String: Double] {
+        return ["Latitude": latitude, "Longitude": longitude]
+    }
+        
+    public var clLocationFormat: CLLocationCoordinate2D {
+        return CLLocationCoordinate2DMake(latitude, longitude)
     }
     
     public init?(fromString string: String) {
@@ -50,14 +62,6 @@ import MapKit
         }
         self.latitude = asDouble.0
         self.longitude = asDouble.1
-    }
-    
-    public func toDict() -> [String: Double] {
-        return ["Latitude": latitude, "Longitude": longitude]
-    }
-        
-    public func toCLLocationCoordinates() -> CLLocationCoordinate2D {
-        return CLLocationCoordinate2DMake(latitude, longitude)
     }
     
     private static func extractFrom(doubles dict: [String: Any]) -> (Double, Double)? {
