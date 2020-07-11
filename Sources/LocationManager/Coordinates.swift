@@ -9,10 +9,28 @@
 import Foundation
 import MapKit
 
-public class Coordinates: NSObject, Comparable {
+ public class Coordinates: NSObject, Comparable {
     var latitude: Double
     var longitude: Double
     static let empty = Coordinates(withLatitude: 0.0, andLongitude: 0.0)
+    
+    public override var description: String {
+        return "\(latitude)|\(longitude)"
+    }
+    
+    public init?(fromString string: String) {
+        let coordinates = string.split(separator: "|")
+        guard coordinates.count == 2,
+            let latitudeString = coordinates.first,
+            let longitudeString = coordinates.last,
+            let latitude = Double(String(latitudeString)),
+        let longitude = Double(String(longitudeString))
+        else {
+            return nil
+        }
+        self.latitude = latitude
+        self.longitude = longitude
+    }
     
     public init(withLatitude latitude: Double, andLongitude longitude: Double) {
         self.latitude = latitude
@@ -37,11 +55,7 @@ public class Coordinates: NSObject, Comparable {
     public func toDict() -> [String: Double] {
         return ["Latitude": latitude, "Longitude": longitude]
     }
-    
-    public func toString() -> String {
-        return "\(latitude), \(longitude)"
-    }
-    
+        
     public func toCLLocationCoordinates() -> CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(latitude, longitude)
     }
