@@ -10,6 +10,9 @@ import CoreLocation
 import Foundation
 import RestManager
 
+/**
+ Conform to be able handle location related events from LocationManager
+ */
 public protocol LocationManagerDelegate {
     func locationManager(_ locationManager: LocationManager, didUpdateCurrentLocation location: Coordinates)
     func locationManagerDidNotUpdateLocation(_ locationManager: LocationManager)
@@ -17,11 +20,18 @@ public protocol LocationManagerDelegate {
     func locationManager(_ locationManager: LocationManager, didGetAreaName name: String)
 }
 
+/**
+ Functions as a wrapper for CLLocationManager and extends with additional functionality (e.g. getting area name for current location)
+ */
 public class LocationManager: NSObject, CLLocationManagerDelegate {
     
     var locationManager: CLLocationManager?
     var running = false
     var googleGeocodeAPIKey: String?
+    
+    /**
+     Assing this to an object so that it can handle various location events
+     */
     public var delegate: LocationManagerDelegate?
     private let lockQueue = DispatchQueue(label: "LocationManager.lockQueue")
     fileprivate var _currentLocation: Coordinates?
@@ -40,6 +50,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         self.startUpdatingLocation()
     }
     
+    /**
+     Provide the Google Geocode API key that you get from web console
+     */
     public func setupGoogleGeocodeAPI(withKey key:String) {
         self.googleGeocodeAPIKey = key
     }
@@ -50,25 +63,36 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
+    /**
+     Access to the singleton instance
+     */
     public static let shared = LocationManager()
     
+    /**
+     Request from the user permission to always track location
+     */
     public func requestAlwaysPermission() {
         if let initializedLocationManager = locationManager {
             initializedLocationManager.requestAlwaysAuthorization()
         }
     }
     
+    /**
+     Request from the user permission to track location when your app is in use
+     */
     public func requestWhenInUsePermission() {
         if let initializedLocationManager = locationManager {
             initializedLocationManager.requestWhenInUseAuthorization()
         }
     }
     
-    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    internal func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.delegate?.locationManager(self, didChangeAuthorization: status)
     }
 
-    
+    /**
+     Start updating location, events must be handled through the delegate methods
+     */
     @objc public func startUpdatingLocation() {
         if let initializedLocationManager = locationManager {
             initializedLocationManager.startUpdatingLocation()
@@ -78,7 +102,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    func initializeCLLocationManager() {
+    fileprivate func initializeCLLocationManager() {
         locationManager = CLLocationManager()
         if let initializedLocationManager = locationManager {
             initializedLocationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters
@@ -88,11 +112,11 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    internal func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("error when updating location: \(error.localizedDescription)")
     }
     
-    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    internal func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locationManager?.location
             else {
                 self.delegate?.locationManagerDidNotUpdateLocation(self)
@@ -106,6 +130,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         self.delegate?.locationManager(self, didUpdateCurrentLocation: coordinates)
     }
     
+    /**
+     Returns distance between to given Coordinate in meters
+     */
     public func findDistance(to point: Coordinates) -> Int {
         guard let startingLocation = self.currentLocation else {return 0}
         
@@ -114,6 +141,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         return Int(pointLocation.distance(from: currentLocation))
     }
     
+    /**
+     Returns the nearest Coordinate
+     */
     public func findNearest(from pointSet: [Coordinates]) -> Coordinates?{
         var nearestDistance: Int?
         var nearestCoordinates: Coordinates?
@@ -128,6 +158,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         return nearestCoordinates
     }
     
+    /**
+     Returns area name for given Coordinates. Supplied by the Google Geolocator API.
+     */
     public func getAreaName(forCoordinates coordinates: Coordinates) {
         guard let apiKey = self.googleGeocodeAPIKey,
             let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?latlng=\(coordinates.latitude),\(coordinates.longitude)&key=\(apiKey)")
