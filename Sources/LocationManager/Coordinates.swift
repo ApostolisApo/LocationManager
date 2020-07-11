@@ -9,27 +9,46 @@
 import Foundation
 import MapKit
 
+/**
+Enables easier use of coordinates and in various formats
+ */
 public class Coordinates: NSObject, Comparable {
     var latitude: Double
     var longitude: Double
     static let empty = Coordinates(withLatitude: 0.0, andLongitude: 0.0)
     
+    /**
+     String representation
+     */
     public override var description: String {
         return "\(latitude)|\(longitude)"
     }
     
+    /**
+     String representation
+     */
     public var stringFormat: String {
         return "\(latitude)|\(longitude)"
     }
 
+    /**
+     Dictionary representation
+     */
     public var dictionaryFormat: [String: Double] {
         return ["Latitude": latitude, "Longitude": longitude]
     }
-        
+    
+    /**
+     CLLocationCoordinate representation for use with Apple APIs
+     */
     public var clLocationFormat: CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(latitude, longitude)
     }
     
+    /**
+     The string has to be in of the format '{Latitude}|{Longitude}'.
+     Example: '37.6270|47.2270'
+     */
     public init?(fromString string: String) {
         let coordinates = string.split(separator: "|")
         guard coordinates.count == 2,
@@ -44,11 +63,18 @@ public class Coordinates: NSObject, Comparable {
         self.longitude = longitude
     }
     
+    
+    /**
+     Use Double type for both latitude and longitude
+     */
     public init(withLatitude latitude: Double, andLongitude longitude: Double) {
         self.latitude = latitude
         self.longitude = longitude
     }
     
+    /**
+     Use a dictionary with value keys 'Latitude' & 'Longitude'
+     */
     public init?(fromDict dict: [String: Any]) {
         guard let asDouble = Coordinates.extractFrom(doubles: dict)
             else {
