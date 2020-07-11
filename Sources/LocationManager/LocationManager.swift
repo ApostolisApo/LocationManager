@@ -86,7 +86,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    internal func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         self.delegate?.locationManager(self, didChangeAuthorization: status)
     }
 
@@ -112,11 +112,11 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    internal func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("error when updating location: \(error.localizedDescription)")
     }
     
-    internal func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locationManager?.location
             else {
                 self.delegate?.locationManagerDidNotUpdateLocation(self)
