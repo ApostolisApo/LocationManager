@@ -159,7 +159,8 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     /**
-     Returns area name for given Coordinates. Supplied by the Google Geolocator API.
+     Initiates retrieval of area name for given Coordinates. Result is given via the delegate.
+     Supplied by the Google Geolocator API.
      */
     public func getAreaName(forCoordinates coordinates: Coordinates) {
         guard let apiKey = self.googleGeocodeAPIKey,
